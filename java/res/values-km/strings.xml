@@ -158,7 +158,7 @@
     <string name="setup_finish_action" msgid="4208185697271120108">"បាន​បញ្ចប់"</string>
     <string name="show_setup_wizard_icon" msgid="2985876024078390815">"បង្ហាញ​រូប​កម្មវិធី"</string>
     <string name="show_setup_wizard_icon_summary" msgid="714961006007836349">"បង្ហាញ​រូប​កម្មវិធី​នៅ​ក្នុង​កម្ម​​វិធី​ចាប់ផ្ដើម"</string>
-    <string name="app_name" msgid="1388609705083271907">"កម្មវិធី​ផ្ដល់​វចនានុក្រម"</string>
+    <string name="dictionary_provider_app_name" msgid="1388609705083271907">"កម្មវិធី​ផ្ដល់​វចនានុក្រម"</string>
     <string name="dictionary_provider_name" msgid="6344594004933902577">"កម្មវិធី​ផ្ដល់​វចនានុក្រម"</string>
     <string name="dictionary_service_name" msgid="5820737302858072775">"សេវាកម្ម​​វចនានុក្រម"</string>
     <string name="download_description" msgid="7667377256582305064">"ព័ត៌មាន​បច្ចុប្បន្នភាព​វចនានុក្រម"</string>

@@ -158,7 +158,7 @@
     <string name="setup_finish_action" msgid="4208185697271120108">"Đã xong"</string>
     <string name="show_setup_wizard_icon" msgid="2985876024078390815">"Hiển thị biểu tượng ứng dụng"</string>
     <string name="show_setup_wizard_icon_summary" msgid="714961006007836349">"Hiển thị biểu tượng ứng dụng trong trình chạy"</string>
-    <string name="app_name" msgid="1388609705083271907">"Nhà cung cấp từ điển"</string>
+    <string name="dictionary_provider_app_name" msgid="1388609705083271907">"Nhà cung cấp từ điển"</string>
     <string name="dictionary_provider_name" msgid="6344594004933902577">"Nhà cung cấp từ điển"</string>
     <string name="dictionary_service_name" msgid="5820737302858072775">"Dịch vụ từ điển"</string>
     <string name="download_description" msgid="7667377256582305064">"Thông tin cập nhật từ điển"</string>

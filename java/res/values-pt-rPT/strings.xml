@@ -158,7 +158,7 @@
     <string name="setup_finish_action" msgid="4208185697271120108">"Concluído"</string>
     <string name="show_setup_wizard_icon" msgid="2985876024078390815">"Mostrar ícone da aplicação"</string>
     <string name="show_setup_wizard_icon_summary" msgid="714961006007836349">"Mostrar ícone da aplicação no iniciador"</string>
-    <string name="app_name" msgid="1388609705083271907">"Fornecedor de Dicionário"</string>
+    <string name="dictionary_provider_app_name" msgid="1388609705083271907">"Fornecedor de Dicionário"</string>
     <string name="dictionary_provider_name" msgid="6344594004933902577">"Fornecedor de Dicionário"</string>
     <string name="dictionary_service_name" msgid="5820737302858072775">"Serviço de Dicionário"</string>
     <string name="download_description" msgid="7667377256582305064">"Informações de atualização do dicionário"</string>

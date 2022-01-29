@@ -158,7 +158,7 @@
     <string name="setup_finish_action" msgid="4208185697271120108">"Fertig"</string>
     <string name="show_setup_wizard_icon" msgid="2985876024078390815">"App-Symbol anzeigen"</string>
     <string name="show_setup_wizard_icon_summary" msgid="714961006007836349">"App-Symbol in der Übersicht anzeigen"</string>
-    <string name="app_name" msgid="1388609705083271907">"Wörterbuchbereitstellung"</string>
+    <string name="dictionary_provider_app_name" msgid="1388609705083271907">"Wörterbuchbereitstellung"</string>
     <string name="dictionary_provider_name" msgid="6344594004933902577">"Wörterbuchbereitstellung"</string>
     <string name="dictionary_service_name" msgid="5820737302858072775">"Wörterbuch"</string>
     <string name="download_description" msgid="7667377256582305064">"Update-Informationen für Wörterbuch"</string>

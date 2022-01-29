@@ -20,7 +20,7 @@
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- This test application name. -->
-    <string name="app_name" translatable="false">EditTextVariations</string>
+    <string name="dictionary_provider_app_name" translatable="false">EditTextVariations</string>
     <!-- The menu title to change color theme of this application. [CHAR LIMIT=20] -->
     <string name="menu_change_theme">Change Theme</string>
     <!-- The menu title to display the version name of this application. [CHAR LIMIT=20] -->

@@ -158,7 +158,7 @@
     <string name="setup_finish_action" msgid="4208185697271120108">"Дууссан"</string>
     <string name="show_setup_wizard_icon" msgid="2985876024078390815">"Апп дүрсийг харуулах"</string>
     <string name="show_setup_wizard_icon_summary" msgid="714961006007836349">"Эхлүүлэгч дээр аппликейшний дүрсийг харуулах"</string>
-    <string name="app_name" msgid="1388609705083271907">"Толь бичгээр хангагч"</string>
+    <string name="dictionary_provider_app_name" msgid="1388609705083271907">"Толь бичгээр хангагч"</string>
     <string name="dictionary_provider_name" msgid="6344594004933902577">"Толь бичгээг хангагч"</string>
     <string name="dictionary_service_name" msgid="5820737302858072775">"Толь бичгийн үйлчилгээ"</string>
     <string name="download_description" msgid="7667377256582305064">"Толь бичгийн шинэчлэлтийн мэдээлэл"</string>

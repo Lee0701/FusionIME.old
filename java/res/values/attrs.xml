@@ -19,6 +19,31 @@
 -->
 
 <resources>
+
+<!--    Duplicate attrs-->
+    <attr name="keyBackground" format="reference|enum">
+        <enum name="twelvekeysRegular" value="0" />
+        <enum name="twelvekeysFunction" value="1" />
+        <enum name="twelvekeysFunctionWithThreeDots" value="2" />
+        <enum name="qwertyRegular" value="3" />
+        <enum name="qwertyFunction" value="4" />
+        <enum name="qwertyFunctionWithThreeDots" value="5" />
+        <enum name="qwertyFunctionSpaceWithThreeDots" value="6" />
+        <enum name="keyboardSeparatorTop" value="7" />
+        <enum name="keyboardSeparatorCenter" value="8" />
+        <enum name="keyboardSeparatorBottom" value="9" />
+        <enum name="transparent" value="10" />
+    </attr>
+
+    <attr name="keyWidth" format="dimension|fraction|enum">
+        <enum name="fillRight" value="-1" />
+    </attr>
+
+    <attr name="horizontalGap" format="dimension|fraction" />
+    <attr name="verticalGap" format="dimension|fraction" />
+
+    <!--    LatinIME attrs-->
+
     <declare-styleable name="KeyboardTheme">
         <!-- InputView style -->
         <attr name="inputViewStyle" format="reference" />
@@ -47,7 +72,7 @@
             {@link android.graphics.drawable.StateListDrawable}, with the following possible states:
              normal, pressed, checkable, checkable+pressed, checkable+checked,
              checkable+checked+pressed. -->
-        <attr name="keyBackground" format="reference" />
+        <attr name="keyBackground" />
         <!-- Background image for the functional key. This image needs to be a
              {@link android.graphics.drawable.StateListDrawable}, with the following possible
              states: normal, pressed. -->
@@ -250,9 +275,9 @@
              keyboard height. -->
         <attr name="rowHeight" format="dimension|fraction" />
         <!-- Default horizontal gap between keys, in the proportion of keyboard width. -->
-        <attr name="horizontalGap" format="fraction" />
+        <attr name="horizontalGap" />
         <!-- Default vertical gap between rows of keys, in the proportion of keyboard height. -->
-        <attr name="verticalGap" format="fraction" />
+        <attr name="verticalGap" />
         <!-- More keys keyboard layout template -->
         <attr name="moreKeysTemplate" format="reference" />
         <!-- Icon set for key top and key preview. These should be aligned with
@@ -377,9 +402,7 @@
              area up to the right edge of the keyboard. -->
         <!-- This should be aligned with
              {@link com.android.inputmethod.keyboard.internal.KeyboardRow#KEYWIDTH_FILL_RIGHT}. -->
-        <attr name="keyWidth" format="fraction|enum">
-            <enum name="fillRight" value="-1" />
-        </attr>
+        <attr name="keyWidth" />
         <!-- The X-coordinate of upper right corner of this key including horizontal gap, in the
              proportion of keyboard width.
              If the value is negative, the origin is the right edge of the keyboard. -->
@@ -598,5 +621,166 @@
         <attr name="maxValue" format="integer" />
         <attr name="minValue" format="integer" />
         <attr name="stepValue" format="integer" />
+    </declare-styleable>
+
+<!--    Mozc Resources-->
+    <declare-styleable name="SeekBarPreference">
+        <attr name="seekbar_offset" format="integer" />
+        <attr name="seekbar_unit" format="string" />
+        <attr name="seekbar_low_text" format="string" />
+        <attr name="seekbar_middle_text" format="string" />
+        <attr name="seekbar_high_text" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="MozcMultiSelectListPreference">
+        <attr name="entryKeys" format="reference" />
+        <attr name="entries" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="MozcKeyboard">
+        <attr name="keyboardContentDescription" format="string" />
+
+        <attr name="flickThreshold" format="dimension" />
+
+        <attr name="keyBackground" />
+
+        <attr name="keyWidth" />
+        <attr name="keyHeight" format="dimension|fraction" />
+        <attr name="keyHorizontalLayoutWeight" format="integer" />
+        <attr name="horizontalGap" />
+        <attr name="verticalGap" />
+        <attr name="defaultIconWidth" format="dimension|fraction" />
+        <attr name="defaultIconHeight" format="dimension|fraction" />
+        <attr name="defaultHorizontalPadding" format="dimension|fraction" />
+        <attr name="defaultVerticalPadding" format="dimension|fraction" />
+        <attr name="popUpHeight" format="dimension|fraction" />
+        <!-- following offset is diff between a center of a key and a center of the popup window. -->
+        <attr name="popUpXOffset" format="dimension|fraction" />
+        <attr name="popUpYOffset" format="dimension|fraction" />
+        <attr name="popUpIconWidth" format="dimension|fraction" />
+        <attr name="popUpIconHeight" format="dimension|fraction" />
+    </declare-styleable>
+
+    <declare-styleable name="MozcKeyboardRow">
+        <attr name="rowEdgeFlags">
+            <flag name="top" value="4" />
+            <flag name="bottom" value="8" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="MozcKeyboardKey">
+        <attr name="keyEdgeFlags">
+            <flag name="left" value="1" />
+            <flag name="right" value="2" />
+        </attr>
+        <attr name="stick">
+            <enum name="even" value="0" />
+            <enum name="left" value="1" />
+            <enum name="right" value="2" />
+        </attr>
+        <attr name="isRepeatable" format="boolean" />
+        <attr name="isModifier" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="KeyState">
+        <attr name="contentDescription" format="string" />
+        <!-- We now support four meta states here; shift, caps_lock, alt and unmodified.
+             Please also see KeyState.MetaState for more details.
+          -->
+        <attr name="metaState">
+            <!-- It is allowed to set multiple state here (by concatenating '|' separator).
+                 If we don't specify this attribute it means unmodified state.
+              -->
+            <flag name="shift" value="1" />
+            <flag name="capsLock" value="2" />
+            <flag name="alt" value="4" />
+
+            <flag name="action_done" value="8" />
+            <flag name="action_go" value="16" />
+            <flag name="action_next" value="32" />
+            <flag name="action_none" value="64" />
+            <flag name="action_previous" value="128" />
+            <flag name="action_search" value="256" />
+            <flag name="action_send" value="512" />
+
+            <flag name="variation_uri" value="1024" />
+            <flag name="variation_email_address" value="2048" />
+
+            <!-- globe and no_globe are XOR. -->
+            <flag name="globe" value="4096" />
+            <flag name="no_globe" value="8192" />
+
+            <flag name="composing" value="16384" />
+            <flag name="handling_touch_event" value="32768" />
+
+            <!-- "fallback" works as "catch all" when no other flags are matched.
+                 metaState="fallback" equals to metaState="" so typically
+                 this flag is not specified explicity.
+                 However this is useful when used with logical-OR operator.
+                 e.g., metaState="fallback|composing" -->
+            <flag name="fallback" value="1073741824" />
+        </attr>
+        <attr name="nextMetaState">
+            <!-- TODO(matsuzakit): Rename to nextAddedMetaStates -->
+            <flag name="shift" value="1" />
+            <flag name="capsLock" value="2" />
+            <flag name="alt" value="4" />
+        </attr>
+        <attr name="nextRemovedMetaStates">
+            <flag name="shift" value="1" />
+            <flag name="capsLock" value="2" />
+            <flag name="alt" value="4" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="Flick">
+        <attr name="direction">
+            <!-- A flick to the center here means just a tap of a key. -->
+            <enum name="center" value="0" />
+            <enum name="left" value="1" />
+            <enum name="right" value="2" />
+            <enum name="up" value="3" />
+            <enum name="down" value="4" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="KeyEntity">
+        <attr name="sourceId" format="integer" />
+        <attr name="keyCode" format="integer|string" />
+        <attr name="longPressKeyCode" format="integer|string" />
+        <attr name="longPressTimeoutTrigger" format="boolean" />
+        <attr name="keyIcon" format="reference" />
+        <attr name="keyCharacter" format="string" />
+        <attr name="flickHighlight" format="boolean" />
+        <attr name="horizontalPadding" format="fraction" />
+        <attr name="verticalPadding" format="fraction" />
+        <!-- iconWidth/Height are used to control the size of shown icon.
+             The region on which an icon is shown is detemined in below way:
+             1. The region is initially given by keyboard parser (Size: Key width x Row height).
+             2. The region is shrinked by horizontal/verticalPadding.
+             3. If (iconWidth > region_width OR iconHeight > region_height),
+                the icon is drawn in the region (iconWidth/Height is not used).
+                If not, the icon is shown in the size (iconHeight, iconWidth).
+             4. Aspect ratio is always kept.
+             The default values are too large so
+             if not provided the icon is drawn as large as possible. -->
+        <attr name="iconHeight" format="fraction|dimension" />
+        <attr name="iconWidth" format="fraction|dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="PopUp">
+        <attr name="popUpIcon" format="reference" />
+        <attr name="popUpLongPressIcon" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="Skin">
+        <attr name="dimension" format="dimension|fraction|reference" />
+    </declare-styleable>
+
+    <declare-styleable name="MozcImageView">
+        <!-- Drawable represened as raw resource must be specified through "rawSrc" attribute. -->
+        <attr name="rawSrc" format="reference" />
+        <attr name="maxImageWidth" format="dimension" />
+        <attr name="maxImageHeight" format="dimension" />
     </declare-styleable>
 </resources>

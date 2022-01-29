@@ -158,7 +158,7 @@
     <string name="setup_finish_action" msgid="4208185697271120108">"Завршено"</string>
     <string name="show_setup_wizard_icon" msgid="2985876024078390815">"Покажи икона на апликација"</string>
     <string name="show_setup_wizard_icon_summary" msgid="714961006007836349">"Прикажи икона на апликација во стартувачот"</string>
-    <string name="app_name" msgid="1388609705083271907">"Давател на услуга речник"</string>
+    <string name="dictionary_provider_app_name" msgid="1388609705083271907">"Давател на услуга речник"</string>
     <string name="dictionary_provider_name" msgid="6344594004933902577">"Давател на услуга речник"</string>
     <string name="dictionary_service_name" msgid="5820737302858072775">"Услуга Речник"</string>
     <string name="download_description" msgid="7667377256582305064">"Информации за ажурирање речник"</string>

@@ -158,7 +158,7 @@
     <string name="setup_finish_action" msgid="4208185697271120108">"ပြီးဆုံးသွားပြီ"</string>
     <string name="show_setup_wizard_icon" msgid="2985876024078390815">"အက်ပ်သင်္ကေတပြခြင်း"</string>
     <string name="show_setup_wizard_icon_summary" msgid="714961006007836349">"launcher တွင် အပလီကေးရှင်း သင်္ကေတကိုပြရန်"</string>
-    <string name="app_name" msgid="1388609705083271907">"အဘိဓါန် ထောက်ပံ့သူ"</string>
+    <string name="dictionary_provider_app_name" msgid="1388609705083271907">"အဘိဓါန် ထောက်ပံ့သူ"</string>
     <string name="dictionary_provider_name" msgid="6344594004933902577">"အဘိဓါန် ထောက်ပံ့သူ"</string>
     <string name="dictionary_service_name" msgid="5820737302858072775">"အဘိဓါန် ဝန်ဆောင်မှု"</string>
     <string name="download_description" msgid="7667377256582305064">"အဘိဓာန် အသစ်အပ်ဒိတ်လုပ်ရန် အချက်အလက်"</string>

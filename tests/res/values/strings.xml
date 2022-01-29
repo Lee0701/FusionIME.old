@@ -18,5 +18,5 @@
 */
 -->
 <resources>
-     <string name="app_name" translatable="false">LatinIMETests</string>
+     <string name="dictionary_provider_app_name" translatable="false">LatinIMETests</string>
 </resources>

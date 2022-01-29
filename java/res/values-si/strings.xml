@@ -158,7 +158,7 @@
     <string name="setup_finish_action" msgid="4208185697271120108">"අවසන්"</string>
     <string name="show_setup_wizard_icon" msgid="2985876024078390815">"යෙදුම් නිරූපකය පෙන්වන්න"</string>
     <string name="show_setup_wizard_icon_summary" msgid="714961006007836349">"දියත්කරනය තුළ යෙදුම් නිරූපකය දර්ශනය කරන්න"</string>
-    <string name="app_name" msgid="1388609705083271907">"ශබ්දකෝෂ සැපයුම්කරු"</string>
+    <string name="dictionary_provider_app_name" msgid="1388609705083271907">"ශබ්දකෝෂ සැපයුම්කරු"</string>
     <string name="dictionary_provider_name" msgid="6344594004933902577">"ශබ්දකෝෂ සැපයුම්කරු"</string>
     <string name="dictionary_service_name" msgid="5820737302858072775">"ශබ්ද කෝෂ සේවාව"</string>
     <string name="download_description" msgid="7667377256582305064">"ශබ්ද කෝෂ යාවත්කාලීන තොරතුරු"</string>

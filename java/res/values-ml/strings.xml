@@ -158,7 +158,7 @@
     <string name="setup_finish_action" msgid="4208185697271120108">"പൂർത്തിയായി"</string>
     <string name="show_setup_wizard_icon" msgid="2985876024078390815">"അപ്ലിക്കേഷൻ ഐക്കൺ കാണിക്കുക"</string>
     <string name="show_setup_wizard_icon_summary" msgid="714961006007836349">"ലോഞ്ചറിൽ അപ്ലിക്കേഷൻ ഐക്കൺ പ്രദർശിപ്പിക്കുക"</string>
-    <string name="app_name" msgid="1388609705083271907">"നിഘണ്ടു ദാതാവ്"</string>
+    <string name="dictionary_provider_app_name" msgid="1388609705083271907">"നിഘണ്ടു ദാതാവ്"</string>
     <string name="dictionary_provider_name" msgid="6344594004933902577">"നിഘണ്ടു ദാതാവ്"</string>
     <string name="dictionary_service_name" msgid="5820737302858072775">"നിഘണ്ടു സേവനം"</string>
     <string name="download_description" msgid="7667377256582305064">"നിഘണ്ടു അപ്‌ഡേറ്റുചെയ്യാനുള്ള വിവരം"</string>
