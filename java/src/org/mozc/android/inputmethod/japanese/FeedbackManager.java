@@ -84,10 +84,10 @@ public class FeedbackManager {
     NARROW_FRAME_WIDEN_BUTTON_DOWN(true, AudioManager.FX_KEYPRESS_STANDARD),
     ;
     // Constant value to indicate no sound feedback should be played.
-    static final int NO_SOUND = -1;
+    public static final int NO_SOUND = -1;
     // If true, haptic feedback is fired.
-    final boolean isHapticFeedbackTarget;
-    final int soundEffectType;
+    public final boolean isHapticFeedbackTarget;
+    public final int soundEffectType;
 
     /**
      * @param isHapticFeedbackTarget true if the device should vibrate at the event.
@@ -108,7 +108,7 @@ public class FeedbackManager {
     }
   }
 
-  interface FeedbackListener {
+  public interface FeedbackListener {
     /**
      * Called when vibrate feedback is fired.
      * @param duration the duration of vibration in millisecond.
@@ -133,7 +133,7 @@ public class FeedbackManager {
   /**
    * @param listener the listener which is called when feedback event is fired.
    */
-  FeedbackManager(FeedbackListener listener) {
+  public FeedbackManager(FeedbackListener listener) {
     // TODO(matsuzakit): This initial value should be changed
     //     after implementing setting screen.
     isHapticFeedbackEnabled = false;
@@ -141,7 +141,7 @@ public class FeedbackManager {
     this.feedbackListener = listener;
   }
 
-  void fireFeedback(FeedbackEvent event) {
+  public void fireFeedback(FeedbackEvent event) {
     if (isHapticFeedbackEnabled && event.isHapticFeedbackTarget) {
       feedbackListener.onVibrate(hapticFeedbackDuration);
     }
@@ -150,39 +150,39 @@ public class FeedbackManager {
     }
   }
 
-  boolean isHapticFeedbackEnabled() {
+  public boolean isHapticFeedbackEnabled() {
     return isHapticFeedbackEnabled;
   }
 
-  void setHapticFeedbackEnabled(boolean enable) {
+  public void setHapticFeedbackEnabled(boolean enable) {
     isHapticFeedbackEnabled = enable;
   }
 
-  long getHapticFeedbackDuration() {
+  public long getHapticFeedbackDuration() {
     return hapticFeedbackDuration;
   }
 
-  void setHapticFeedbackDuration(long duration) {
+  public void setHapticFeedbackDuration(long duration) {
     this.hapticFeedbackDuration = duration;
   }
 
-  boolean isSoundFeedbackEnabled() {
+  public boolean isSoundFeedbackEnabled() {
     return isSoundFeedbackEnabled;
   }
 
-  void setSoundFeedbackEnabled(boolean enable) {
+  public void setSoundFeedbackEnabled(boolean enable) {
     isSoundFeedbackEnabled = enable;
   }
 
-  float getSoundFeedbackVolume() {
+  public float getSoundFeedbackVolume() {
     return soundFeedbackVolume;
   }
 
-  void setSoundFeedbackVolume(float volume) {
+  public void setSoundFeedbackVolume(float volume) {
     this.soundFeedbackVolume = volume;
   }
 
-  void release() {
+  public void release() {
     setSoundFeedbackEnabled(false);
   }
 }

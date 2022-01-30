@@ -1,11 +1,12 @@
 package io.github.lee0701.inputmethod.fusion
 
-import android.content.Context.INPUT_METHOD_SERVICE
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.res.Configuration
-import android.os.Build
-import android.os.Handler
-import android.os.Message
+import android.media.AudioManager
+import android.os.*
 import android.preference.PreferenceManager
 import android.text.InputType
 import android.text.SpannableStringBuilder
@@ -15,7 +16,6 @@ import android.text.style.CharacterStyle
 import android.text.style.UnderlineSpan
 import android.view.KeyEvent
 import android.view.View
-import android.view.Window
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
@@ -27,6 +27,7 @@ import com.google.common.base.Preconditions
 import com.google.protobuf.ByteString
 import org.mozc.android.inputmethod.japanese.*
 import org.mozc.android.inputmethod.japanese.FeedbackManager.FeedbackEvent
+import org.mozc.android.inputmethod.japanese.FeedbackManager.FeedbackListener
 import org.mozc.android.inputmethod.japanese.KeycodeConverter.KeyEventInterface
 import org.mozc.android.inputmethod.japanese.ViewManagerInterface.LayoutAdjustment
 import org.mozc.android.inputmethod.japanese.emoji.EmojiProviderType
@@ -53,6 +54,8 @@ import org.mozc.android.inputmethod.japanese.session.SessionExecutor.EvaluationC
 import org.mozc.android.inputmethod.japanese.session.SessionExecutor.getInstanceInitializedIfNecessary
 import org.mozc.android.inputmethod.japanese.session.SessionHandlerFactory
 import org.mozc.android.inputmethod.japanese.util.ImeSwitcherFactory
+import org.mozc.android.inputmethod.japanese.util.ImeSwitcherFactory.ImeSwitcher
+import org.mozc.android.inputmethod.japanese.util.LauncherIconManagerFactory
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -61,10 +64,27 @@ class FusionIME: LatinIME() {
     private var mode: ImeMode = ImeMode.LATIN
 
     private lateinit var viewManager: ViewManagerInterface
+    lateinit var feedbackManager: FeedbackManager
     private lateinit var sessionExecutor: SessionExecutor
     private lateinit var symbolHistoryStorage: SymbolHistoryStorage
     private val selectionTracker = SelectionTracker()
     private var applicationCompatibility = ApplicationCompatibility.getDefaultInstance()
+
+    // A receiver to accept a notification via intents.
+    val configurationChangedHandler: Handler = Handler(Looper.getMainLooper(), ConfigurationChangeCallback())
+
+    // Handler to process SYNC_DATA command for storing history data.
+    var sendSyncDataCommandHandler: Handler = SendSyncDataCommandHandler()
+
+    // Handler to process SYNC_DATA command for storing history data.
+    private val memoryTrimmingHandler: Handler = MemoryTrimmingHandler()
+
+
+    // A handler for onSharedPreferenceChanged().
+    // Note: the handler is needed to be held by the service not to be GC'ed.
+    val sharedPreferenceChangeListener: OnSharedPreferenceChangeListener =
+        SharedPreferenceChangeAdapter()
+
 
     private lateinit var sharedPreferences: SharedPreferences
     private var propagatedClientSidePreference: ClientSidePreference? = null
@@ -87,25 +107,27 @@ class FusionIME: LatinIME() {
         this.symbolHistoryStorage = SymbolHistoryStorageImpl(sessionExecutor)
 
         val eventListener = MozcEventListener()
-        val imeSwitcher = ImeSwitcherFactory.getImeSwitcher(this)
-        viewManager = DependencyFactory.getDependency(
-            applicationContext
-        ).createViewManager(
-            applicationContext,
-            eventListener,
-            symbolHistoryStorage,
-            imeSwitcher,
-            MozcMenuDialogListenerImpl(this, eventListener)
-        )
-
-        propagateClientSidePreference(
-            ClientSidePreference(
-                sharedPreferences, resources, resources.configuration.orientation
-            )
-        )
+        prepareOnce(eventListener, symbolHistoryStorage, sharedPreferences)
+        prepareEveryTime(sharedPreferences, resources.configuration)
 
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         setMode(imm.currentInputMethodSubtype)
+    }
+
+    override fun onDestroy() {
+        feedbackManager.release()
+        sessionExecutor.syncData()
+
+        // Following listeners/handlers have reference to the service.
+        // To free the service instance, remove the listeners/handlers.
+
+        // Following listeners/handlers have reference to the service.
+        // To free the service instance, remove the listeners/handlers.
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
+        sendSyncDataCommandHandler.removeMessages(SendSyncDataCommandHandlerCompanion.WHAT)
+        memoryTrimmingHandler.removeMessages(MemoryTrimmingHandlerCompanion.WHAT)
+
+        super.onDestroy()
     }
 
     private fun setMode(subtype: InputMethodSubtype) {
@@ -127,12 +149,97 @@ class FusionIME: LatinIME() {
 
     override fun setInputView(view: View?) {
         super.setInputView(view)
+        viewManager.updateGlobeButtonEnabled()
+        viewManager.updateMicrophoneButtonEnabled()
     }
 
     override fun onCreateInputView(): View {
         val superInputView = super.onCreateInputView()
         if(mode == ImeMode.MOZC) return viewManager.createMozcView(this)
         return superInputView
+    }
+
+    /**
+     * Prepares something which should be done only once.
+     */
+    private fun prepareOnce(
+        eventListener: ViewEventListener,
+        symbolHistoryStorage: SymbolHistoryStorage,
+        sharedPreferences: SharedPreferences?
+    ) {
+        prepareOnceMozc(eventListener, symbolHistoryStorage, sharedPreferences)
+    }
+
+    private fun prepareOnceMozc(
+        eventListener: ViewEventListener,
+        symbolHistoryStorage: SymbolHistoryStorage,
+        sharedPreferences: SharedPreferences?
+    ) {
+        val context = applicationContext
+        val forwardIntent = ApplicationInitializerFactory.createInstance(this).initialize(
+            MozcUtil.isSystemApplication(context),
+            MozcUtil.isDevChannel(context),
+            DependencyFactory.getDependency(applicationContext).isWelcomeActivityPreferrable,
+            MozcUtil.getAbiIndependentVersionCode(context),
+            LauncherIconManagerFactory.getDefaultInstance(),
+            PreferenceUtil.getDefaultPreferenceManagerStatic()
+        )
+        if (forwardIntent.isPresent) {
+            startActivity(forwardIntent.get())
+        }
+
+        // Setup FeedbackManager.
+        val vibrator =
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) (getSystemService(VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
+            else getSystemService(VIBRATOR_SERVICE) as Vibrator
+        val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+        feedbackManager = FeedbackManager(RealFeedbackListener(vibrator, audioManager))
+
+        val imeSwitcher = ImeSwitcherFactory.getImeSwitcher(this)
+        viewManager = DependencyFactory.getDependency(applicationContext)
+            .createViewManager(applicationContext, eventListener, symbolHistoryStorage, imeSwitcher,
+                MozcMenuDialogListenerImpl(this, eventListener))
+
+        // Set a callback for preference changing.
+        sharedPreferences?.registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener)
+    }
+
+    /**
+     * Prepares something which should be done every time when the session is newly created.
+     */
+    private fun prepareEveryTime(sharedPreferences: SharedPreferences?, deviceConfiguration: Configuration) {
+        if(mode == ImeMode.MOZC) prepareEveryTimeMozc(sharedPreferences, deviceConfiguration)
+    }
+
+    private fun prepareEveryTimeMozc(sharedPreferences: SharedPreferences?, deviceConfiguration: Configuration) {
+        val isLogging = (sharedPreferences != null
+                && sharedPreferences.getBoolean(
+            PREF_TWEAK_LOGGING_PROTOCOL_BUFFERS,
+            false
+        ))
+        // Force to initialize here.
+        sessionExecutor.reset(
+            SessionHandlerFactory(Optional.fromNullable(sharedPreferences)), this
+        )
+        sessionExecutor.setLogging(isLogging)
+        updateImposedConfig()
+        viewManager.onConfigurationChanged(resources.configuration)
+        // Make sure that the server and the client have the same keyboard specification.
+        // User preference's keyboard will be set after this step.
+        changeKeyboardSpecificationAndSendKey(
+            null, null, currentKeyboardSpecification, deviceConfiguration, emptyList()
+        )
+        if (sharedPreferences != null) {
+            propagateClientSidePreference(
+                ClientSidePreference(
+                    sharedPreferences, resources, deviceConfiguration.orientation
+                )
+            )
+            // TODO(hidehiko): here we just set the config based on preferences. When we start
+            //   to support sync on Android, we need to revisit the config related design.
+            sessionExecutor.config = ConfigUtil.toConfig(sharedPreferences)
+            sessionExecutor.preferenceUsageStatsEvent(sharedPreferences, resources)
+        }
     }
 
     override fun onStartInput(editorInfo: EditorInfo?, restarting: Boolean) {
@@ -244,13 +351,36 @@ class FusionIME: LatinIME() {
     override fun onConfigurationChanged(conf: Configuration) {
         super.onConfigurationChanged(conf)
 
+        val inputConnection = currentInputConnection
+        if (inputConnection != null) {
+            if (inputBound) {
+                inputConnection.finishComposingText()
+            }
+            val selectionStart = selectionTracker.lastSelectionStart
+            val selectionEnd = selectionTracker.lastSelectionEnd
+            if (selectionStart >= 0 && selectionEnd >= 0) {
+                // We need to keep the last caret position, but it will be soon overwritten in
+                // onStartInput. Theoretically, we should prohibit the overwriting, but unfortunately
+                // there is no good way to figure out whether the invocation of onStartInput is caused by
+                // configuration change, or not. Thus, instead, we'll make an event to invoke
+                // onUpdateSelectionInternal with an expected position after the onStartInput invocation,
+                // so that it will again overwrite the caret position.
+                // Note that, if a user rotates the device with holding preedit text, it will be committed
+                // by finishComposingText above, and onUpdateSelection will be invoked from the framework.
+                // Invoke onUpdateSelectionInternal twice with same arguments should be safe in this
+                // situation.
+                configurationChangedHandler.sendMessage(
+                    configurationChangedHandler.obtainMessage(0, selectionStart, selectionEnd)
+                )
+            }
+        }
+        resetContext()
         selectionTracker.onConfigurationChanged()
 
         sessionExecutor.updateRequest(
             MozcUtil.getRequestBuilder(resources, currentKeyboardSpecification, conf).build(),
             emptyList()
         )
-
 
         // NOTE : This method is not called at the time when the service is started.
         // Based on newConfig, client side preferences should be sent
@@ -272,6 +402,63 @@ class FusionIME: LatinIME() {
     override fun onUnbindInput() {
         inputBound = false
         super.onUnbindInput()
+    }
+
+    override fun onWindowShown() {
+        super.onWindowShown()
+        showStatusIcon()
+        // Remove memory trimming message.
+        // Remove memory trimming message.
+        memoryTrimmingHandler.removeMessages(MemoryTrimmingHandlerCompanion.WHAT)
+        // Ensure keyboard's request.
+        // The session might be deleted by trimMemory caused by onWindowHidden.
+        // Note that this logic must be placed *after* removing the messages in memoryTrimmingHandler.
+        // Otherwise the session might be unexpectedly deleted and newly re-created one will be used
+        // without appropriate request which is sent below.
+        // Ensure keyboard's request.
+        // The session might be deleted by trimMemory caused by onWindowHidden.
+        // Note that this logic must be placed *after* removing the messages in memoryTrimmingHandler.
+        // Otherwise the session might be unexpectedly deleted and newly re-created one will be used
+        // without appropriate request which is sent below.
+        changeKeyboardSpecificationAndSendKey(
+            null, null, currentKeyboardSpecification, resources.configuration, emptyList()
+        )
+    }
+
+    override fun onWindowHidden() {
+
+        // "Hiding IME's window" is very similar to "Turning off IME" for PC.
+        // Thus
+        // - Committing composing text.
+        // - Removing all pending messages.
+        // - Resetting Mozc server
+        // are needed.
+
+        // "Hiding IME's window" is very similar to "Turning off IME" for PC.
+        // Thus
+        // - Committing composing text.
+        // - Removing all pending messages.
+        // - Resetting Mozc server
+        // are needed.
+        sessionExecutor.removePendingEvaluations()
+
+        resetContext()
+        selectionTracker.onWindowHidden()
+        viewManager.reset()
+        hideStatusIcon()
+        // MemoryTrimmingHandler.DURATION_MS from now, memory trimming will be done.
+        // If the window is shown before MemoryTrimmingHandler.DURATION_MS,
+        // the message posted here will be removed.
+        // MemoryTrimmingHandler.DURATION_MS from now, memory trimming will be done.
+        // If the window is shown before MemoryTrimmingHandler.DURATION_MS,
+        // the message posted here will be removed.
+        memoryTrimmingHandler.removeMessages(MemoryTrimmingHandlerCompanion.WHAT)
+        memoryTrimmingHandler.sendEmptyMessageDelayed(
+            MemoryTrimmingHandlerCompanion.WHAT,
+            MemoryTrimmingHandlerCompanion.DURATION_MS.toLong()
+        )
+
+        super.onWindowHidden()
     }
 
     override fun onEvaluateFullscreenMode(): Boolean {
@@ -319,24 +506,24 @@ class FusionIME: LatinIME() {
         if (oldPreference == null
             || oldPreference.isHapticFeedbackEnabled != newPreference.isHapticFeedbackEnabled
         ) {
-//            feedbackManager.setHapticFeedbackEnabled(newPreference.isHapticFeedbackEnabled)
+            feedbackManager.setHapticFeedbackEnabled(newPreference.isHapticFeedbackEnabled)
         }
         if (oldPreference == null
             || oldPreference.hapticFeedbackDuration != newPreference.hapticFeedbackDuration
         ) {
-//            feedbackManager.setHapticFeedbackDuration(newPreference.hapticFeedbackDuration)
+            feedbackManager.setHapticFeedbackDuration(newPreference.hapticFeedbackDuration)
         }
         if (oldPreference == null
             || oldPreference.isSoundFeedbackEnabled != newPreference.isSoundFeedbackEnabled
         ) {
-//            feedbackManager.setSoundFeedbackEnabled(newPreference.isSoundFeedbackEnabled)
+            feedbackManager.setSoundFeedbackEnabled(newPreference.isSoundFeedbackEnabled)
         }
         if (oldPreference == null
             || oldPreference.soundFeedbackVolume != newPreference.soundFeedbackVolume
         ) {
             // The default value is 0.4f. In order to set the 50 to the default value, divide the
             // preference value by 125f heuristically.
-//            feedbackManager.setSoundFeedbackVolume(newPreference.soundFeedbackVolume / 125f)
+            feedbackManager.setSoundFeedbackVolume(newPreference.soundFeedbackVolume / 125f)
         }
         if (oldPreference == null
             || oldPreference.isPopupFeedbackEnabled != newPreference.isPopupFeedbackEnabled
@@ -699,7 +886,7 @@ class FusionIME: LatinIME() {
             // caret setting.
             return
         }
-        var caretPosition: Int = selectionTracker.getPreeditStartPosition()
+        var caretPosition: Int = selectionTracker.preeditStartPosition
         if (output.hasDeletionRange()) {
             caretPosition += output.deletionRange.offset
         }
@@ -1038,17 +1225,17 @@ class FusionIME: LatinIME() {
     private inner class MozcEventListener: ViewEventListener {
         override fun onConversionCandidateSelected(candidateId: Int, rowIndex: Optional<Int?>?) {
             sessionExecutor.submitCandidate(candidateId, rowIndex, renderResultCallback)
-//            feedbackManager.fireFeedback(FeedbackEvent.CANDIDATE_SELECTED)
+            feedbackManager.fireFeedback(FeedbackEvent.CANDIDATE_SELECTED)
         }
 
         override fun onPageUp() {
             sessionExecutor.pageUp(renderResultCallback)
-//            feedbackManager.fireFeedback(FeedbackEvent.KEY_DOWN)
+            feedbackManager.fireFeedback(FeedbackEvent.KEY_DOWN)
         }
 
         override fun onPageDown() {
             sessionExecutor.pageDown(renderResultCallback)
-//            feedbackManager.fireFeedback(FeedbackEvent.KEY_DOWN)
+            feedbackManager.fireFeedback(FeedbackEvent.KEY_DOWN)
         }
 
         override fun onSymbolCandidateSelected(
@@ -1199,6 +1386,124 @@ class FusionIME: LatinIME() {
         }
     }
 
+    /**
+     * A call-back to catch all the change on any preferences.
+     */
+    private inner class SharedPreferenceChangeAdapter : OnSharedPreferenceChangeListener {
+        override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
+            if (isDebugBuild) {
+                MozcLog.d("onSharedPreferenceChanged : $key")
+            }
+            if (key.startsWith(PREF_TWEAK_PREFIX)) {
+                // If the key belongs to PREF_TWEAK group, re-create SessionHandler and view.
+                prepareEveryTime(sharedPreferences, resources.configuration)
+                setInputView(onCreateInputView())
+                return
+            }
+            propagateClientSidePreference(
+                ClientSidePreference(
+                    sharedPreferences, getResources(), resources.configuration.orientation
+                )
+            )
+            sessionExecutor.config = ConfigUtil.toConfig(sharedPreferences)
+            sessionExecutor.preferenceUsageStatsEvent(sharedPreferences, getResources())
+        }
+    }
+
+    private class RealFeedbackListener constructor(
+        vibrator: Vibrator?,
+        audioManager: AudioManager?
+    ) :
+        FeedbackListener {
+        private val vibrator: Vibrator?
+        private val audioManager: AudioManager?
+        override fun onVibrate(duration: Long) {
+            if (duration < 0) {
+                MozcLog.w("duration must be >= 0 but $duration")
+                return
+            }
+            vibrator?.vibrate(duration)
+        }
+
+        override fun onSound(soundEffectType: Int, volume: Float) {
+            if (audioManager != null && soundEffectType != FeedbackEvent.NO_SOUND) {
+                audioManager.playSoundEffect(soundEffectType, volume)
+            }
+        }
+
+        init {
+            if (vibrator == null) {
+                MozcLog.w("vibrator must be non-null. Vibration is disabled.")
+            }
+            this.vibrator = vibrator
+            if (audioManager == null) {
+                MozcLog.w("audioManager must be non-null. Sound feedback is disabled.")
+            }
+            this.audioManager = audioManager
+        }
+    }
+
+    /**
+     * We need to send SYNC_DATA command periodically. This class handles it.
+     */
+    @SuppressLint("HandlerLeak")
+    private inner class SendSyncDataCommandHandler : Handler() {
+        override fun handleMessage(msg: Message) {
+            sessionExecutor.syncData()
+            sendEmptyMessageDelayed(0, SendSyncDataCommandHandlerCompanion.SYNC_DATA_COMMAND_PERIOD.toLong())
+        }
+    }
+
+    object SendSyncDataCommandHandlerCompanion {
+        /**
+         * "what" value of message. Always use this.
+         */
+        const val WHAT = 0
+
+        /**
+         * The current period of sending SYNC_DATA is 15 mins (as same as desktop version).
+         */
+        const val SYNC_DATA_COMMAND_PERIOD = 15 * 60 * 1000
+    }
+
+    /**
+     * To trim memory, a message is handled to invoke trimMemory method
+     * 10 seconds after hiding window.
+     *
+     * This class handles callback operation.
+     * Posting and removing messages should be done in appropriate point.
+     */
+    @SuppressLint("HandlerLeak")
+    private inner class MemoryTrimmingHandler : Handler() {
+        override fun handleMessage(msg: Message) {
+            trimMemory()
+            // Other messages in the queue are removed as they will do the same thing
+            // and will affect nothing.
+            removeMessages(MemoryTrimmingHandlerCompanion.WHAT)
+        }
+    }
+
+    object MemoryTrimmingHandlerCompanion {
+        /**
+         * "what" value of message. Always use this.
+         */
+        const val WHAT = 0
+
+        /**
+         * Duration after hiding window in milliseconds.
+         */
+        const val DURATION_MS = 10 * 1000
+    }
+
+    private fun trimMemory() {
+        // We must guarantee the contract of MemoryManageable#trimMemory.
+        if (!isInputViewShown) {
+            MozcLog.d("Trimming memory")
+            sessionExecutor.deleteSession()
+            viewManager.trimMemory()
+        }
+    }
+
     companion object {
 
         // Keys for tweak preferences.
@@ -1244,4 +1549,5 @@ class FusionIME: LatinIME() {
         }
 
     }
+
 }

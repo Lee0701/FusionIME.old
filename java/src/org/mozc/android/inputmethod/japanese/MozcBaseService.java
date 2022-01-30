@@ -768,8 +768,8 @@ public class MozcBaseService extends InputMethodService {
 
     // Setup FeedbackManager.
     feedbackManager = new FeedbackManager(new RealFeedbackListener(
-        Vibrator.class.cast(getSystemService(Context.VIBRATOR_SERVICE)),
-        AudioManager.class.cast(getSystemService(Context.AUDIO_SERVICE))));
+            (Vibrator) getSystemService(Context.VIBRATOR_SERVICE),
+            (AudioManager) getSystemService(Context.AUDIO_SERVICE)));
 
     this.viewManager = viewManager;
 

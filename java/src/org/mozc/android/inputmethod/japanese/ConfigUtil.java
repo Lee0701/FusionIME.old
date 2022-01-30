@@ -61,7 +61,7 @@ public class ConfigUtil {
    * - incognito_mode, and
    * - general_config (please see also toGeneralConfig(SharedPreferences)).
    */
-  static Config toConfig(SharedPreferences sharedPreferences) {
+  public static Config toConfig(SharedPreferences sharedPreferences) {
     Config.Builder builder = null;
 
     FundamentalCharacterForm spaceCharacterForm =
@@ -77,14 +77,14 @@ public class ConfigUtil {
     if (kanaModifierInsensitiveConversion != null) {
       builder = maybeCreateConfigBuilder(builder)
           .setUseKanaModifierInsensitiveConversion(
-              kanaModifierInsensitiveConversion.booleanValue());
+                  kanaModifierInsensitiveConversion);
     }
 
     Boolean typingCorrection = getBoolean(
         sharedPreferences, PreferenceUtil.PREF_TYPING_CORRECTION_KEY);
     if (typingCorrection != null) {
       builder = maybeCreateConfigBuilder(builder)
-          .setUseTypingCorrection(typingCorrection.booleanValue());
+          .setUseTypingCorrection(typingCorrection);
     }
 
     HistoryLearningLevel historyLearningLevel = getHistoryLearningLevel(
@@ -98,7 +98,7 @@ public class ConfigUtil {
         sharedPreferences, PreferenceUtil.PREF_OTHER_INCOGNITO_MODE_KEY);
     if (incognitoMode != null) {
       builder = maybeCreateConfigBuilder(builder)
-          .setIncognitoMode(incognitoMode.booleanValue());
+          .setIncognitoMode(incognitoMode);
     }
 
     GeneralConfig generalConfig = toGeneralConfig(sharedPreferences);
@@ -128,7 +128,7 @@ public class ConfigUtil {
         sharedPreferences, PreferenceUtil.PREF_OTHER_USAGE_STATS_KEY);
     if (uploadUsageStats != null) {
       builder = maybeCreateGeneralConfigBuilder(builder)
-          .setUploadUsageStats(uploadUsageStats.booleanValue());
+          .setUploadUsageStats(uploadUsageStats);
     }
 
     if (builder != null) {
@@ -149,7 +149,7 @@ public class ConfigUtil {
     }
 
     // Default value wouldn't be used in actual case, but it is required.
-    return Boolean.valueOf(sharedPreferences.getBoolean(key, false));
+    return sharedPreferences.getBoolean(key, false);
   }
 
   /**
