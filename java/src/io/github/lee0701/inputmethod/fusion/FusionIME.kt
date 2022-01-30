@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Message
 import android.preference.PreferenceManager
+import android.text.InputType
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.BackgroundColorSpan
@@ -14,6 +15,7 @@ import android.text.style.CharacterStyle
 import android.text.style.UnderlineSpan
 import android.view.KeyEvent
 import android.view.View
+import android.view.Window
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
@@ -27,16 +29,20 @@ import org.mozc.android.inputmethod.japanese.*
 import org.mozc.android.inputmethod.japanese.FeedbackManager.FeedbackEvent
 import org.mozc.android.inputmethod.japanese.KeycodeConverter.KeyEventInterface
 import org.mozc.android.inputmethod.japanese.ViewManagerInterface.LayoutAdjustment
+import org.mozc.android.inputmethod.japanese.emoji.EmojiProviderType
+import org.mozc.android.inputmethod.japanese.emoji.EmojiUtil
 import org.mozc.android.inputmethod.japanese.hardwarekeyboard.HardwareKeyboard.CompositionSwitchMode
 import org.mozc.android.inputmethod.japanese.keyboard.Keyboard.KeyboardSpecification
 import org.mozc.android.inputmethod.japanese.model.SelectionTracker
 import org.mozc.android.inputmethod.japanese.model.SymbolCandidateStorage.SymbolHistoryStorage
 import org.mozc.android.inputmethod.japanese.model.SymbolMajorCategory
+import org.mozc.android.inputmethod.japanese.mushroom.MushroomResultProxy
 import org.mozc.android.inputmethod.japanese.preference.ClientSidePreference
 import org.mozc.android.inputmethod.japanese.preference.PreferenceUtil
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidates
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.*
+import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Context.InputFieldType
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Input.TouchEvent
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.SessionCommand.UsageStatsEvent
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig
@@ -58,7 +64,7 @@ class FusionIME: LatinIME() {
     private lateinit var sessionExecutor: SessionExecutor
     private lateinit var symbolHistoryStorage: SymbolHistoryStorage
     private val selectionTracker = SelectionTracker()
-    private val applicationCompatibility = ApplicationCompatibility.getDefaultInstance()
+    private var applicationCompatibility = ApplicationCompatibility.getDefaultInstance()
 
     private lateinit var sharedPreferences: SharedPreferences
     private var propagatedClientSidePreference: ClientSidePreference? = null
@@ -70,6 +76,7 @@ class FusionIME: LatinIME() {
     private var inputBound: Boolean = false
 
     private var currentKeyboardSpecification = KeyboardSpecification.TWELVE_KEY_TOGGLE_KANA
+    private var originalWindowAnimationResourceId = Optional.absent<Int>()
 
     override fun onCreate() {
         super.onCreate()
@@ -118,10 +125,120 @@ class FusionIME: LatinIME() {
         setInputView(onCreateInputView())
     }
 
+    override fun setInputView(view: View?) {
+        super.setInputView(view)
+    }
+
     override fun onCreateInputView(): View {
         val superInputView = super.onCreateInputView()
         if(mode == ImeMode.MOZC) return viewManager.createMozcView(this)
         return superInputView
+    }
+
+    override fun onStartInput(editorInfo: EditorInfo?, restarting: Boolean) {
+        if(mode == ImeMode.MOZC) {
+            val attribute = editorInfo ?: return
+
+            applicationCompatibility = ApplicationCompatibility.getInstance(attribute)
+
+            // Update full screen mode, because the application may be changed.
+
+            // Update full screen mode, because the application may be changed.
+            viewManager.isFullscreenMode = (applicationCompatibility.isFullScreenModeSupported
+                    && propagatedClientSidePreference != null && propagatedClientSidePreference!!.isFullscreenMode)
+
+            // Some applications, e.g. gmail or maps, send onStartInput with restarting = true, when a user
+            // rotates a device. In such cases, we don't want to update caret positions, nor reset
+            // the context basically. However, some other applications, such as one with a webview widget
+            // like a browser, send onStartInput with restarting = true, too. Unfortunately,
+            // there seems no way to figure out which one causes this invocation.
+            // So, as a point of compromise, we reset the context every time here. Also, we'll send
+            // finishComposingText as well, in case the new attached field has already had composing text
+            // (we hit such a situation on webview, too).
+            // See also onConfigurationChanged for caret position handling on gmail-like applications'
+            // device rotation events.
+
+            // Some applications, e.g. gmail or maps, send onStartInput with restarting = true, when a user
+            // rotates a device. In such cases, we don't want to update caret positions, nor reset
+            // the context basically. However, some other applications, such as one with a webview widget
+            // like a browser, send onStartInput with restarting = true, too. Unfortunately,
+            // there seems no way to figure out which one causes this invocation.
+            // So, as a point of compromise, we reset the context every time here. Also, we'll send
+            // finishComposingText as well, in case the new attached field has already had composing text
+            // (we hit such a situation on webview, too).
+            // See also onConfigurationChanged for caret position handling on gmail-like applications'
+            // device rotation events.
+            resetContext()
+            val connection = currentInputConnection
+            if (connection != null) {
+                connection.finishComposingText()
+                maybeCommitMushroomResult(attribute, connection)
+            }
+
+            // Send the connected field's attributes to the mozc server.
+
+            // Send the connected field's attributes to the mozc server.
+            sessionExecutor.switchInputFieldType(getInputFieldType(attribute))
+            sessionExecutor.updateRequest(
+                EmojiUtil.createEmojiRequest(
+                    Build.VERSION.SDK_INT,
+                    if (propagatedClientSidePreference != null && EmojiUtil.isCarrierEmojiAllowed(
+                            attribute
+                        )
+                    ) propagatedClientSidePreference!!.emojiProviderType else EmojiProviderType.NONE
+                ), emptyList()
+            )
+            selectionTracker.onStartInput(
+                attribute.initialSelStart, attribute.initialSelEnd, isWebEditText(attribute)
+            )
+        } else {
+            super.onStartInput(editorInfo, restarting)
+        }
+    }
+
+    override fun onStartInputView(editorInfo: EditorInfo?, restarting: Boolean) {
+        if(mode == ImeMode.MOZC) {
+            val attribute = editorInfo ?: return
+            viewManager.onStartInputView(attribute)
+            viewManager.setTextForActionButton(getTextForImeAction(attribute.imeOptions))
+            viewManager.setEditorInfo(attribute)
+            // updateXxxxxButtonEnabled cannot be placed in onStartInput because
+            // the view might be created after onStartInput with *reset* status.
+            // updateXxxxxButtonEnabled cannot be placed in onStartInput because
+            // the view might be created after onStartInput with *reset* status.
+            viewManager.updateGlobeButtonEnabled()
+            viewManager.updateMicrophoneButtonEnabled()
+
+            // Should reset the window animation since the order of onStartInputView() / onFinishInput() is
+            // not stable.
+            resetWindowAnimation()
+            // Mode indicator is available and narrow frame is NOT available on Lollipop or later.
+            // In this case, we temporary disable window animation to show the mode indicator correctly.
+            if (Build.VERSION.SDK_INT >= 21 && viewManager.isNarrowMode) {
+                val window = window.window
+                val animationId = window!!.attributes.windowAnimations
+                if (animationId != 0) {
+                    originalWindowAnimationResourceId = Optional.of(animationId)
+                    window.setWindowAnimations(0)
+                }
+            }
+        } else {
+            super.onStartInputView(editorInfo, restarting)
+        }
+    }
+
+    override fun onFinishInputView(finishingInput: Boolean) {
+        super.onFinishInputView(finishingInput)
+    }
+
+    override fun onFinishInput() {
+        // Omit rendering because the input view will soon disappear.
+        resetContext()
+        selectionTracker.onFinishInput()
+        applicationCompatibility = ApplicationCompatibility.getDefaultInstance()
+        resetWindowAnimation()
+
+        super.onFinishInput()
     }
 
     override fun onConfigurationChanged(conf: Configuration) {
@@ -165,6 +282,19 @@ class FusionIME: LatinIME() {
     override fun onComputeInsets(outInsets: Insets?) {
         if(mode == ImeMode.MOZC) viewManager.computeInsets(applicationContext, outInsets, window.window)
         else super.onComputeInsets(outInsets)
+    }
+
+    private fun resetContext() {
+        sessionExecutor.resetContext()
+        viewManager.reset()
+    }
+
+    private fun resetWindowAnimation() {
+        if (originalWindowAnimationResourceId.isPresent()) {
+            val window = window.window
+            window!!.setWindowAnimations(originalWindowAnimationResourceId.get())
+            originalWindowAnimationResourceId = Optional.absent<Int>()
+        }
     }
 
     /**
@@ -584,6 +714,39 @@ class FusionIME: LatinIME() {
         }
     }
 
+    /**
+     * Hook to support mushroom protocol. If there is pending Mushroom result for the connecting
+     * field, commit it. Then, (regardless of whether there exists pending result,) clears
+     * all remaining pending result.
+     */
+    private fun maybeCommitMushroomResult(attribute: EditorInfo, connection: InputConnection?) {
+        if (connection == null) {
+            return
+        }
+        val resultProxy = MushroomResultProxy.getInstance()
+        var result: String?
+        synchronized(resultProxy) {
+            // We need to obtain the result.
+            result = resultProxy.getReplaceKey(attribute.fieldId)
+        }
+        if (result != null) {
+            // Found the pending mushroom application result to the connecting field. Commit it.
+            connection.commitText(result, MozcUtil.CURSOR_POSITION_TAIL)
+            // And clear the proxy.
+            // Previous implementation cleared the proxy even when the replace result is NOT found.
+            // This caused incompatible mushroom issue because the activity transition gets sometimes
+            // like following:
+            //   Mushroom activity -> Intermediate activity -> Original application activity
+            // In this case the intermediate activity unexpectedly consumed the result so nothing
+            // was committed to the application activity.
+            // To fix this issue the proxy is cleared when:
+            // - The result is committed. OR
+            // - Mushroom activity is launched.
+            // NOTE: In the worst case, result data might remain in the proxy.
+            synchronized(resultProxy) { resultProxy.clear() }
+        }
+    }
+
     private fun getPreeditLength(preedit: Preedit): Int {
         var result = 0
         for (i in 0 until preedit.segmentCount) {
@@ -817,6 +980,23 @@ class FusionIME: LatinIME() {
         }
     }
 
+    /**
+     * @return true if connected view is WebEditText (or the application pretends it)
+     */
+    private fun isWebEditText(editorInfo: EditorInfo?): Boolean {
+        if (editorInfo == null) {
+            return false
+        }
+        if (applicationCompatibility.isPretendingWebEditText()) {
+            return true
+        }
+
+        // TODO(hidehiko): Refine the heuristic to check isWebEditText related stuff.
+        MozcLog.d("inputType: " + editorInfo.inputType)
+        val variation = editorInfo.inputType and InputType.TYPE_MASK_VARIATION
+        return variation == InputType.TYPE_TEXT_VARIATION_WEB_EDIT_TEXT
+    }
+
     /** Adapter implementation of the symbol history manipulation.  */
     internal class SymbolHistoryStorageImpl(private val sessionExecutor: SessionExecutor) :
         SymbolHistoryStorage {
@@ -1048,6 +1228,20 @@ class FusionIME: LatinIME() {
         // Underline.
         @VisibleForTesting
         val SPAN_UNDERLINE: CharacterStyle = UnderlineSpan()
+
+        fun getInputFieldType(attribute: EditorInfo): InputFieldType {
+            val inputType = attribute.inputType
+            if (MozcUtil.isPasswordField(inputType)) {
+                return InputFieldType.PASSWORD
+            }
+            val inputClass = inputType and InputType.TYPE_MASK_CLASS
+            if (inputClass == InputType.TYPE_CLASS_PHONE) {
+                return InputFieldType.TEL
+            }
+            return if (inputClass == InputType.TYPE_CLASS_NUMBER) {
+                InputFieldType.NUMBER
+            } else InputFieldType.NORMAL
+        }
 
     }
 }

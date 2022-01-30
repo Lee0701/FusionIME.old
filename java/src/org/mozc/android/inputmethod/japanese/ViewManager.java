@@ -483,7 +483,7 @@ public class ViewManager implements ViewManagerInterface {
    */
   @Override
   public MozcView createMozcView(Context context) {
-    mozcView = MozcView.class.cast(LayoutInflater.from(context).inflate(R.layout.mozc_view, null));
+    mozcView = (MozcView) LayoutInflater.from(context).inflate(R.layout.mozc_view, null);
     // Suppress update of View's internal state
     // until all the updates done in this method are finished. Just in case.
     mozcView.setVisibility(View.GONE);
