@@ -24,8 +24,9 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import android.support.test.runner.AndroidJUnit4;
+
 import androidx.test.filters.SmallTest;
-import androidx.test.runner.AndroidJUnit4;
 
 import com.android.inputmethod.latin.network.BlockingHttpClient.ResponseProcessor;
 
