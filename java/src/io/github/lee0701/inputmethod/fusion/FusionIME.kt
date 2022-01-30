@@ -1,7 +1,6 @@
 package io.github.lee0701.inputmethod.fusion
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.res.Configuration
@@ -54,7 +53,6 @@ import org.mozc.android.inputmethod.japanese.session.SessionExecutor.EvaluationC
 import org.mozc.android.inputmethod.japanese.session.SessionExecutor.getInstanceInitializedIfNecessary
 import org.mozc.android.inputmethod.japanese.session.SessionHandlerFactory
 import org.mozc.android.inputmethod.japanese.util.ImeSwitcherFactory
-import org.mozc.android.inputmethod.japanese.util.ImeSwitcherFactory.ImeSwitcher
 import org.mozc.android.inputmethod.japanese.util.LauncherIconManagerFactory
 import java.util.*
 import kotlin.collections.ArrayList
@@ -1096,7 +1094,7 @@ class FusionIME: LatinIME() {
             // Submit composition on the transition from software KB to hardware KB by key event.
             // This is done only when mozcKeyEvent is non-null (== the key event is a printable
             // character) in order to avoid clearing pre-selected characters by meta keys.
-            if (!currentKeyboardSpecification.isHardwareKeyboard()
+            if (!currentKeyboardSpecification.isHardwareKeyboard
                 && keyboardSpecification.isHardwareKeyboard
                 && mozcKeyEvent != null
             ) {
@@ -1364,14 +1362,10 @@ class FusionIME: LatinIME() {
         ) {
             Preconditions.checkNotNull(layoutAdjustment)
             val configuration: Configuration = resources.configuration
-            if (sharedPreferences == null || configuration == null) {
-                return
-            }
             val isLandscapeKeyboardSettingActive = PreferenceUtil.isLandscapeKeyboardSettingActive(
                 sharedPreferences, configuration.orientation
             )
-            val key: String
-            key = if (isLandscapeKeyboardSettingActive) {
+            val key = if (isLandscapeKeyboardSettingActive) {
                 PreferenceUtil.PREF_LANDSCAPE_LAYOUT_ADJUSTMENT_KEY
             } else {
                 PreferenceUtil.PREF_PORTRAIT_LAYOUT_ADJUSTMENT_KEY
