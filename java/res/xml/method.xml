@@ -116,6 +116,16 @@
         android:settingsActivity="com.android.inputmethod.latin.settings.SettingsActivity"
         android:isDefault="@bool/im_is_default"
         android:supportsSwitchingToNextInputMethod="true">
+
+<!-- Mozc subtype -->
+    <subtype
+        android:icon="@drawable/application_icon"
+        android:imeSubtypeExtraValue="EmojiCapable"
+        android:imeSubtypeLocale="ja_JP"
+        android:imeSubtypeMode="keyboard"
+        android:label="@string/subtype_ja" />
+
+
     <subtype android:icon="@drawable/ic_ime_switcher_dark"
             android:label="@string/subtype_en_US"
             android:subtypeId="0xc9194f98"

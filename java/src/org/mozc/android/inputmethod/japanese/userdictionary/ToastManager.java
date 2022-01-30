@@ -123,10 +123,11 @@ public class ToastManager {
     Toast toast = Toast.makeText(context, resourceId, Toast.LENGTH_SHORT);
 
     // Delegate the View. Note that it seems to ok to set it even if toast is currently visible.
-    this.toast.setView(toast.getView());
+//    this.toast.setView(toast.getView());
 
     // Again, invoke the show method, so that the Toast message will gradually change to the
     // new one.
-    this.toast.show();
+//    this.toast.show();
+    toast.show();
   }
 }

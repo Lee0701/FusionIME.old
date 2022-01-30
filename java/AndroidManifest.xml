@@ -244,7 +244,7 @@
             android:uiOptions="splitActionBarWhenNarrow"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppThemeSelectorSettings"
-            android:exported="false">
+            android:exported="true">
 
             <!-- Intent filters to receive a file-sending intent for importing user dictionary data.
                  UserDictionaryToolActivity accepts only file scheme.
