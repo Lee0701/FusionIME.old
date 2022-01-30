@@ -22,7 +22,7 @@ import android.util.Xml;
 
 import com.android.inputmethod.keyboard.Key;
 import com.android.inputmethod.keyboard.Keyboard;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import com.android.inputmethod.latin.utils.ResourceUtils;
 
 import org.xmlpull.v1.XmlPullParser;

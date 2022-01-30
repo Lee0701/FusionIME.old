@@ -37,7 +37,7 @@ import org.mozc.android.inputmethod.japanese.keyboard.Keyboard.KeyboardSpecifica
 import org.mozc.android.inputmethod.japanese.keyboard.KeyboardParser;
 import org.mozc.android.inputmethod.japanese.keyboard.KeyboardViewBackgroundSurface;
 import org.mozc.android.inputmethod.japanese.preference.ClientSidePreference.KeyboardLayout;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import org.mozc.android.inputmethod.japanese.view.DrawableCache;
 import org.mozc.android.inputmethod.japanese.view.Skin;
 import com.google.common.base.Optional;

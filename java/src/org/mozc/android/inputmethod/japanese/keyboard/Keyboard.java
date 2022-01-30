@@ -35,7 +35,7 @@ import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.CompositionM
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Request.CrossingEdgeBehavior;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Request.SpaceOnAlphanumeric;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Request.SpecialRomanjiTable;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 

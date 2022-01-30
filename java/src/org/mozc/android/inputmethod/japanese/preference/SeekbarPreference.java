@@ -29,7 +29,7 @@
 
 package org.mozc.android.inputmethod.japanese.preference;
 
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;

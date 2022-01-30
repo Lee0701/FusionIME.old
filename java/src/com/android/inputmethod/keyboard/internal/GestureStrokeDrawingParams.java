@@ -18,7 +18,7 @@ package com.android.inputmethod.keyboard.internal;
 
 import android.content.res.TypedArray;
 
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 
 /**
  * This class holds parameters to control how a gesture stroke is sampled and drawn on the screen.

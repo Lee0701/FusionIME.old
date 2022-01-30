@@ -31,7 +31,7 @@ package org.mozc.android.inputmethod.japanese.preference;
 
 import org.mozc.android.inputmethod.japanese.MozcLog;
 import org.mozc.android.inputmethod.japanese.MozcUtil;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;

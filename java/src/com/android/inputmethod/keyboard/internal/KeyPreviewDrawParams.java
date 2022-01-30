@@ -25,7 +25,7 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 
 public final class KeyPreviewDrawParams {
     // XML attributes of {@link MainKeyboardView}.

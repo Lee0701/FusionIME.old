@@ -35,7 +35,7 @@ import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Command;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.CompositionMode;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Input;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.SessionCommand;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import org.mozc.android.inputmethod.japanese.util.CursorAnchorInfoWrapper;
 import org.mozc.android.inputmethod.japanese.view.MozcImageView;
 import org.mozc.android.inputmethod.japanese.view.Skin;

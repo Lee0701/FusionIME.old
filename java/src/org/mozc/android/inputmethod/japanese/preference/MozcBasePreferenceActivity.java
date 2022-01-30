@@ -36,7 +36,7 @@ import org.mozc.android.inputmethod.japanese.MozcUtil;
 import org.mozc.android.inputmethod.japanese.hardwarekeyboard.HardwareKeyboardSpecification;
 import org.mozc.android.inputmethod.japanese.preference.KeyboardPreviewDrawable.BitmapCache;
 import org.mozc.android.inputmethod.japanese.preference.KeyboardPreviewDrawable.CacheReferenceKey;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import org.mozc.android.inputmethod.japanese.util.LauncherIconManagerFactory;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;

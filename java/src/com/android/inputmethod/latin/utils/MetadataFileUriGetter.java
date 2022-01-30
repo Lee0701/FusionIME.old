@@ -16,7 +16,7 @@
 
 package com.android.inputmethod.latin.utils;
 
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 
 import android.content.Context;
 

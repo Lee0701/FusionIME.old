@@ -35,7 +35,7 @@ import org.mozc.android.inputmethod.japanese.accessibility.KeyboardAccessibility
 import org.mozc.android.inputmethod.japanese.keyboard.KeyState.MetaState;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Input.TouchAction;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Input.TouchEvent;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 
 import org.mozc.android.inputmethod.japanese.view.DrawableCache;
 import org.mozc.android.inputmethod.japanese.view.Skin;

@@ -28,6 +28,8 @@ import com.android.inputmethod.keyboard.MainKeyboardView;
 import com.android.inputmethod.latin.suggestions.MoreSuggestionsView;
 import com.android.inputmethod.latin.suggestions.SuggestionStripView;
 
+import io.github.lee0701.inputmethod.fusion.R;
+
 public final class InputView extends FrameLayout {
     private final Rect mInputViewRect = new Rect();
     private MainKeyboardView mMainKeyboardView;

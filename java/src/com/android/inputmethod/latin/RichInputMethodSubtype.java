@@ -34,6 +34,8 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import io.github.lee0701.inputmethod.fusion.R;
+
 /**
  * Enrichment class for InputMethodSubtype to enable concurrent multi-lingual input.
  *

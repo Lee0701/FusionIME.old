@@ -52,6 +52,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import io.github.lee0701.inputmethod.fusion.R;
+
 /**
  * Group class for static methods to help with creation and getting of the binary dictionary
  * file from the dictionary provider

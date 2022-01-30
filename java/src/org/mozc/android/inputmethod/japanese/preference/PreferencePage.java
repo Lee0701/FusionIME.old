@@ -30,7 +30,7 @@
 package org.mozc.android.inputmethod.japanese.preference;
 
 import org.mozc.android.inputmethod.japanese.MozcLog;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;

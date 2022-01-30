@@ -32,7 +32,7 @@ package org.mozc.android.inputmethod.japanese.session;
 import org.mozc.android.inputmethod.japanese.KeycodeConverter.KeyEventInterface;
 import org.mozc.android.inputmethod.japanese.MozcLog;
 import org.mozc.android.inputmethod.japanese.MozcUtil;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import org.mozc.android.inputmethod.japanese.ViewManagerInterface.LayoutAdjustment;
 import org.mozc.android.inputmethod.japanese.preference.ClientSidePreference;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands;

@@ -29,7 +29,7 @@
 
 package org.mozc.android.inputmethod.japanese.model;
 
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 
 /**
  * Symbol's minor category to which the candidates belong.

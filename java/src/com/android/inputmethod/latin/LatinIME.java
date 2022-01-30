@@ -111,6 +111,8 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import io.github.lee0701.inputmethod.fusion.R;
+
 /**
  * Input method implementation for Qwerty'ish keyboard.
  */

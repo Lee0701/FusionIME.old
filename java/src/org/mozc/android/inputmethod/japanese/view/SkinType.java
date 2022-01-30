@@ -30,7 +30,7 @@
 package org.mozc.android.inputmethod.japanese.view;
 
 import org.mozc.android.inputmethod.japanese.MozcLog;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import org.mozc.android.inputmethod.japanese.view.SkinParser.SkinParserException;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;

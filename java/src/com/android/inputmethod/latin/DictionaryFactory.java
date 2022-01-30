@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Locale;
 
+import io.github.lee0701.inputmethod.fusion.R;
+
 /**
  * Factory for dictionary instances.
  */

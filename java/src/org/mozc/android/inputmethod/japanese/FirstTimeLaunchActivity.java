@@ -30,7 +30,7 @@
 package org.mozc.android.inputmethod.japanese;
 
 import org.mozc.android.inputmethod.japanese.preference.PreferenceUtil;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 
 
 import android.app.Activity;

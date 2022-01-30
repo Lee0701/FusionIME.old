@@ -18,7 +18,7 @@ package com.android.inputmethod.keyboard.internal;
 
 import android.content.res.TypedArray;
 
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import com.android.inputmethod.latin.utils.ResourceUtils;
 
 /**

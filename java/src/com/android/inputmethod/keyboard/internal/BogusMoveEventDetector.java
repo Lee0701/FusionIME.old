@@ -20,7 +20,7 @@ import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import com.android.inputmethod.latin.common.Constants;
 import com.android.inputmethod.latin.define.DebugFlags;
 

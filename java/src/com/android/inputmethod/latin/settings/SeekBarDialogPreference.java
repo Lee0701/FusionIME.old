@@ -26,7 +26,7 @@ import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 
 public final class SeekBarDialogPreference extends DialogPreference
         implements SeekBar.OnSeekBarChangeListener {

@@ -60,7 +60,7 @@ import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.SessionComma
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SelectionShortcut;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoConfig.Config.SessionKeymap;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import org.mozc.android.inputmethod.japanese.session.SessionExecutor;
 import org.mozc.android.inputmethod.japanese.session.SessionHandlerFactory;
 import org.mozc.android.inputmethod.japanese.util.CursorAnchorInfoWrapper;

@@ -35,7 +35,7 @@ import org.mozc.android.inputmethod.japanese.keyboard.KeyEntity;
 import org.mozc.android.inputmethod.japanese.keyboard.KeyState;
 import org.mozc.android.inputmethod.japanese.keyboard.KeyState.MetaState;
 import org.mozc.android.inputmethod.japanese.keyboard.Keyboard;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;

@@ -22,7 +22,7 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.util.SparseIntArray;
 
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 
 import java.util.HashMap;
 

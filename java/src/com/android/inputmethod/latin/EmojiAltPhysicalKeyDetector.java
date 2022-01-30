@@ -31,6 +31,8 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import io.github.lee0701.inputmethod.fusion.R;
+
 /**
  * A class for detecting Emoji-Alt physical key.
  */

@@ -22,7 +22,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 
 import com.android.inputmethod.keyboard.PointerTracker;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import com.android.inputmethod.latin.common.CoordinateUtils;
 
 /**

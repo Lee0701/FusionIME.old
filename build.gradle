@@ -28,8 +28,8 @@ android {
         targetSdkVersion 31
         versionName "1.0"
 
-        applicationId 'com.android.inputmethod.latin'
-        testApplicationId 'com.android.inputmethod.latin.tests'
+        applicationId 'io.github.lee0701.inputmethod.fusion'
+        testApplicationId 'io.github.lee0701.inputmethod.fusion.tests'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = false
 
@@ -112,7 +112,6 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
-    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
     implementation 'com.google.guava:guava:30.1-android'
     implementation 'com.google.protobuf:protobuf-java:3.14.0'
 

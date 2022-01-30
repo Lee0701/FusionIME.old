@@ -29,7 +29,7 @@
 
 package org.mozc.android.inputmethod.japanese.mushroom;
 
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 
 import android.app.Activity;
 import android.content.Context;

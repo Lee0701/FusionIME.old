@@ -33,7 +33,7 @@ import org.mozc.android.inputmethod.japanese.MozcUtil.TelephonyManagerInterface;
 import org.mozc.android.inputmethod.japanese.emoji.EmojiProviderType;
 import org.mozc.android.inputmethod.japanese.preference.PreferenceUtil;
 import org.mozc.android.inputmethod.japanese.preference.PreferenceUtil.PreferenceManagerStaticInterface;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 
 import org.mozc.android.inputmethod.japanese.util.LauncherIconManagerFactory.LauncherIconManager;
 import com.google.common.annotations.VisibleForTesting;

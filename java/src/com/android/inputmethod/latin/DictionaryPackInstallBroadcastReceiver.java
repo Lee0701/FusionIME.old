@@ -28,6 +28,8 @@ import android.content.pm.ProviderInfo;
 import android.net.Uri;
 import android.util.Log;
 
+import io.github.lee0701.inputmethod.fusion.R;
+
 /**
  * Receives broadcasts pertaining to dictionary management and takes the appropriate action.
  *

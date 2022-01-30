@@ -54,7 +54,7 @@ import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Command;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.CompositionMode;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Input.TouchEvent;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import org.mozc.android.inputmethod.japanese.ui.MenuDialog;
 import org.mozc.android.inputmethod.japanese.ui.MenuDialog.MenuDialogListener;
 import org.mozc.android.inputmethod.japanese.util.CursorAnchorInfoWrapper;

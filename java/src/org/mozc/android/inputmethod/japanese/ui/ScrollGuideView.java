@@ -29,7 +29,7 @@
 
 package org.mozc.android.inputmethod.japanese.ui;
 
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import org.mozc.android.inputmethod.japanese.view.RectKeyDrawable;
 import org.mozc.android.inputmethod.japanese.view.Skin;
 import com.google.common.annotations.VisibleForTesting;

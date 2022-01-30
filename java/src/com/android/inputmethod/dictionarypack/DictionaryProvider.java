@@ -30,7 +30,7 @@ import android.os.ParcelFileDescriptor;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import com.android.inputmethod.latin.common.LocaleUtils;
 import com.android.inputmethod.latin.utils.DebugLogUtils;
 

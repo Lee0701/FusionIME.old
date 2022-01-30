@@ -34,7 +34,7 @@ import org.mozc.android.inputmethod.japanese.MozcUtil;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.Entry;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionary.PosType;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoUserDictionaryStorage.UserDictionaryCommandStatus.Status;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import org.mozc.android.inputmethod.japanese.session.SessionExecutor;
 import org.mozc.android.inputmethod.japanese.session.SessionHandlerFactory;
 import org.mozc.android.inputmethod.japanese.userdictionary.UserDictionaryUtil.DictionaryNameDialog;

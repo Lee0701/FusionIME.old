@@ -18,7 +18,7 @@ package com.android.inputmethod.latin.settings;
 
 import android.os.Bundle;
 
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import com.android.inputmethod.latin.common.Constants;
 import com.android.inputmethod.latin.define.ProductionFlags;
 

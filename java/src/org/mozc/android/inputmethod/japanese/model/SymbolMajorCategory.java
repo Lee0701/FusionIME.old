@@ -29,7 +29,7 @@
 
 package org.mozc.android.inputmethod.japanese.model;
 
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import org.mozc.android.inputmethod.japanese.ui.CandidateLayoutRenderer;
 import org.mozc.android.inputmethod.japanese.ui.CandidateLayoutRenderer.DescriptionLayoutPolicy;
 import com.google.common.base.Preconditions;

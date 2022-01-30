@@ -20,7 +20,7 @@ import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.util.SparseIntArray;
 
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import com.android.inputmethod.latin.utils.ResourceUtils;
 
 import javax.annotation.Nonnull;

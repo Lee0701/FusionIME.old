@@ -37,7 +37,7 @@ import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Command;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Input;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.Input.CommandType;
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands.SessionCommand;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 
 import org.mozc.android.inputmethod.japanese.ui.CandidateLayoutRenderer.DescriptionLayoutPolicy;
 import org.mozc.android.inputmethod.japanese.ui.CandidateLayoutRenderer.ValueScalingPolicy;

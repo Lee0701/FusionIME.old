@@ -37,7 +37,7 @@ import com.android.inputmethod.keyboard.internal.KeyboardBuilder;
 import com.android.inputmethod.keyboard.internal.KeyboardParams;
 import com.android.inputmethod.keyboard.internal.UniqueKeysCache;
 import com.android.inputmethod.latin.InputAttributes;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import com.android.inputmethod.latin.RichInputMethodSubtype;
 import com.android.inputmethod.latin.define.DebugFlags;
 import com.android.inputmethod.latin.utils.InputTypeUtils;

@@ -30,7 +30,7 @@
 package org.mozc.android.inputmethod.japanese.keyboard;
 
 import org.mozc.android.inputmethod.japanese.keyboard.BackgroundDrawableFactory.DrawableType;
-import com.android.inputmethod.latin.R;
+import io.github.lee0701.inputmethod.fusion.R;
 import org.mozc.android.inputmethod.japanese.ui.PopUpLayouter;
 import org.mozc.android.inputmethod.japanese.view.DrawableCache;
 import org.mozc.android.inputmethod.japanese.view.Skin;
