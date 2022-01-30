@@ -42,12 +42,12 @@ import android.view.inputmethod.InputConnection;
  * Real implementation of MozcDialogListener.
  *
  */
-class MozcMenuDialogListenerImpl implements MenuDialogListener {
+public class MozcMenuDialogListenerImpl implements MenuDialogListener {
   private final InputMethodService inputMethodService;
   private final ViewEventListener eventListener;
   private boolean showInputMethodPicker = false;
 
-  MozcMenuDialogListenerImpl(
+  public MozcMenuDialogListenerImpl(
       InputMethodService inputMethodService, ViewEventListener eventListener) {
     this.inputMethodService = Preconditions.checkNotNull(inputMethodService);
     this.eventListener = Preconditions.checkNotNull(eventListener);
