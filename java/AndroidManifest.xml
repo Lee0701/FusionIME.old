@@ -57,7 +57,7 @@
          android:directBootAware="true">
 
         <!-- Services -->
-        <service android:name="FusionIME"
+        <service android:name="FusionIMEService"
              android:label="@string/english_ime_name"
              android:permission="android.permission.BIND_INPUT_METHOD"
              android:exported="true">
