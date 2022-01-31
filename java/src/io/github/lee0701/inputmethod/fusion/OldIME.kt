@@ -59,7 +59,7 @@ import kotlin.collections.ArrayList
 
 class OldIME: LatinIME() {
 
-    private var mode: ImeMode = ImeMode.LATIN
+    private var mode: IMEMode = IMEMode.LATIN
 
     private lateinit var viewManager: ViewManagerInterface
     lateinit var feedbackManager: FeedbackManager
@@ -131,9 +131,9 @@ class OldIME: LatinIME() {
     private fun setMode(subtype: InputMethodSubtype) {
         val locale = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) subtype.languageTag else subtype.locale
         if(locale == "ja_JP" || locale == "ja-JP") {
-            mode = ImeMode.MOZC
+            mode = IMEMode.MOZC
         } else {
-            mode = ImeMode.LATIN
+            mode = IMEMode.LATIN
         }
     }
 
@@ -141,7 +141,7 @@ class OldIME: LatinIME() {
         if(subtype != null) {
             setMode(subtype)
         }
-        if(mode == ImeMode.LATIN) super.onCurrentInputMethodSubtypeChanged(subtype)
+        if(mode == IMEMode.LATIN) super.onCurrentInputMethodSubtypeChanged(subtype)
         setInputView(onCreateInputView())
     }
 
@@ -153,7 +153,7 @@ class OldIME: LatinIME() {
 
     override fun onCreateInputView(): View {
         val superInputView = super.onCreateInputView()
-        if(mode == ImeMode.MOZC) return viewManager.createMozcView(this)
+        if(mode == IMEMode.MOZC) return viewManager.createMozcView(this)
         return superInputView
     }
 
@@ -206,7 +206,7 @@ class OldIME: LatinIME() {
      * Prepares something which should be done every time when the session is newly created.
      */
     private fun prepareEveryTime(sharedPreferences: SharedPreferences?, deviceConfiguration: Configuration) {
-        if(mode == ImeMode.MOZC) prepareEveryTimeMozc(sharedPreferences, deviceConfiguration)
+        if(mode == IMEMode.MOZC) prepareEveryTimeMozc(sharedPreferences, deviceConfiguration)
     }
 
     private fun prepareEveryTimeMozc(sharedPreferences: SharedPreferences?, deviceConfiguration: Configuration) {
@@ -241,7 +241,7 @@ class OldIME: LatinIME() {
     }
 
     override fun onStartInput(editorInfo: EditorInfo?, restarting: Boolean) {
-        if(mode == ImeMode.MOZC) {
+        if(mode == IMEMode.MOZC) {
             val attribute = editorInfo ?: return
 
             applicationCompatibility = ApplicationCompatibility.getInstance(attribute)
@@ -302,7 +302,7 @@ class OldIME: LatinIME() {
     }
 
     override fun onStartInputView(editorInfo: EditorInfo?, restarting: Boolean) {
-        if(mode == ImeMode.MOZC) {
+        if(mode == IMEMode.MOZC) {
             val attribute = editorInfo ?: return
             viewManager.onStartInputView(attribute)
             viewManager.setTextForActionButton(getTextForImeAction(attribute.imeOptions))
@@ -465,7 +465,7 @@ class OldIME: LatinIME() {
     }
 
     override fun onComputeInsets(outInsets: Insets?) {
-        if(mode == ImeMode.MOZC) viewManager.computeInsets(applicationContext, outInsets, window.window)
+        if(mode == IMEMode.MOZC) viewManager.computeInsets(applicationContext, outInsets, window.window)
         else super.onComputeInsets(outInsets)
     }
 

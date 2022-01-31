@@ -1,6 +1,8 @@
 package io.github.lee0701.inputmethod.fusion
 
 import android.view.inputmethod.InputConnection
+import io.github.lee0701.inputmethod.fusion.input.InputHandler
+import io.github.lee0701.inputmethod.fusion.view.InputViewManager
 
 interface FusionIME {
     val inputViewShown: Boolean
@@ -9,7 +11,9 @@ interface FusionIME {
     var inputViewManager: InputViewManager
     var inputHandler: InputHandler
 
-    fun requestHideSelf(flags: Int)
+    fun reset()
+
+    fun hideWindow()
 
     fun sendEditorAction(fromEnterKey: Boolean): Boolean
 }

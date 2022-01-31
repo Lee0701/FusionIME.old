@@ -1,8 +1,9 @@
-package io.github.lee0701.inputmethod.fusion
+package io.github.lee0701.inputmethod.fusion.view
 
 import android.content.Context
 import android.inputmethodservice.InputMethodService
 import android.view.Window
+import io.github.lee0701.inputmethod.fusion.event.FusionKeyEvent
 
 interface InputViewManager: ViewManager {
 

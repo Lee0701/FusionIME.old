@@ -1,4 +1,4 @@
-package io.github.lee0701.inputmethod.fusion
+package io.github.lee0701.inputmethod.fusion.view
 
 import android.content.Context
 import android.content.SharedPreferences

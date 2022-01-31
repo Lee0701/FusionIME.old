@@ -1,4 +1,4 @@
-package io.github.lee0701.inputmethod.fusion
+package io.github.lee0701.inputmethod.fusion.event
 
 import android.view.KeyEvent
 import org.mozc.android.inputmethod.japanese.KeycodeConverter

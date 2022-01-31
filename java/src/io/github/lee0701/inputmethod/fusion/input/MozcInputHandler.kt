@@ -1,10 +1,12 @@
-package io.github.lee0701.inputmethod.fusion
+package io.github.lee0701.inputmethod.fusion.input
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.preference.PreferenceManager
 import com.google.common.base.Optional
+import io.github.lee0701.inputmethod.fusion.event.FusionKeyEvent
+import io.github.lee0701.inputmethod.fusion.event.MozcKeyEvent
 import org.mozc.android.inputmethod.japanese.ConfigUtil
 import org.mozc.android.inputmethod.japanese.KeycodeConverter
 import org.mozc.android.inputmethod.japanese.MozcUtil

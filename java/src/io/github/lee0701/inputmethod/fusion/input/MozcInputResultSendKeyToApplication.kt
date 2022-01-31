@@ -1,9 +1,10 @@
-package io.github.lee0701.inputmethod.fusion
+package io.github.lee0701.inputmethod.fusion.input
 
 import android.os.SystemClock
 import android.view.KeyCharacterMap
 import android.view.KeyEvent
 import android.view.inputmethod.InputConnection
+import io.github.lee0701.inputmethod.fusion.FusionIME
 import org.mozc.android.inputmethod.japanese.KeycodeConverter
 import org.mozc.android.inputmethod.japanese.MozcUtil
 
@@ -71,7 +72,7 @@ class MozcInputResultSendKeyToApplication(
         // First, try to hide the subview, such as the symbol input view or the cursor view.
         // If neither is shown, hideSubInputView would fail, then hide the whole software keyboard.
         if (!ime.inputViewManager.hideSubInputView()) {
-            ime.requestHideSelf(0)
+            ime.hideWindow()
         }
         return true
     }

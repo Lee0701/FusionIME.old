@@ -1,10 +1,12 @@
-package io.github.lee0701.inputmethod.fusion
+package io.github.lee0701.inputmethod.fusion.input
 
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.BackgroundColorSpan
 import android.text.style.CharacterStyle
 import android.view.inputmethod.InputConnection
+import io.github.lee0701.inputmethod.fusion.FusionIME
+import io.github.lee0701.inputmethod.fusion.OldIME
 import org.mozc.android.inputmethod.japanese.KeycodeConverter
 import org.mozc.android.inputmethod.japanese.MozcLog
 import org.mozc.android.inputmethod.japanese.MozcUtil

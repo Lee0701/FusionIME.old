@@ -5,6 +5,11 @@ import android.preference.PreferenceManager
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import io.github.lee0701.inputmethod.fusion.event.FusionKeyEvent
+import io.github.lee0701.inputmethod.fusion.input.InputHandler
+import io.github.lee0701.inputmethod.fusion.input.InputResult
+import io.github.lee0701.inputmethod.fusion.input.MozcInputHandler
+import io.github.lee0701.inputmethod.fusion.view.*
 
 class FusionIMEService: InputMethodService(), FusionIME, InputViewManager.Listener, InputHandler.Listener {
 
@@ -58,6 +63,14 @@ class FusionIMEService: InputMethodService(), FusionIME, InputViewManager.Listen
 
     override fun onResult(inputResult: InputResult) {
         inputResult.process(this)
+    }
+
+    override fun reset() {
+        TODO("Not yet implemented")
+    }
+
+    override fun hideWindow() {
+        super.hideWindow()
     }
 
     override fun sendEditorAction(fromEnterKey: Boolean): Boolean {

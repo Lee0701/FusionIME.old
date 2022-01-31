@@ -1,4 +1,4 @@
-package io.github.lee0701.inputmethod.fusion
+package io.github.lee0701.inputmethod.fusion.view
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -15,16 +15,16 @@ import android.view.Window
 import com.android.inputmethod.latin.LatinIME
 import com.google.common.base.Optional
 import com.google.common.base.Preconditions
+import io.github.lee0701.inputmethod.fusion.event.MozcChangeKeyboardSpecificationEvent
+import io.github.lee0701.inputmethod.fusion.event.MozcKeyEvent
 import org.mozc.android.inputmethod.japanese.*
 import org.mozc.android.inputmethod.japanese.hardwarekeyboard.HardwareKeyboard
 import org.mozc.android.inputmethod.japanese.keyboard.Keyboard
-import org.mozc.android.inputmethod.japanese.model.SelectionTracker
 import org.mozc.android.inputmethod.japanese.model.SymbolCandidateStorage
 import org.mozc.android.inputmethod.japanese.model.SymbolMajorCategory
 import org.mozc.android.inputmethod.japanese.preference.ClientSidePreference
 import org.mozc.android.inputmethod.japanese.preference.PreferenceUtil
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands
-import org.mozc.android.inputmethod.japanese.session.SessionExecutor
 import org.mozc.android.inputmethod.japanese.util.ImeSwitcherFactory
 
 class MozcInputViewManager(

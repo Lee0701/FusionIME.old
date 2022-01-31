@@ -1,6 +1,7 @@
-package io.github.lee0701.inputmethod.fusion
+package io.github.lee0701.inputmethod.fusion.input
 
 import android.content.SharedPreferences
+import io.github.lee0701.inputmethod.fusion.event.FusionKeyEvent
 
 interface InputHandler {
 
