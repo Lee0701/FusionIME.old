@@ -7,11 +7,11 @@ import android.view.inputmethod.InputConnection
 import org.mozc.android.inputmethod.japanese.KeycodeConverter
 import org.mozc.android.inputmethod.japanese.MozcUtil
 
-class MozcInputResultInteractIME(
+class MozcInputResultSendKeyToApplication(
     private val keyEvent: KeycodeConverter.KeyEventInterface,
-): InputResult.InteractIME {
+): InputResult {
 
-    override fun interactIME(ime: FusionIME) {
+    override fun process(ime: FusionIME) {
         val keyCode = keyEvent.keyCode
         // Some keys have a potential to be consumed from mozc client.
         if (maybeProcessBackKey(ime, keyCode) || maybeProcessActionKey(ime, keyCode)) {

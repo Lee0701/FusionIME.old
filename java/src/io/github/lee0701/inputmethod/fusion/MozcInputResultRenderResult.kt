@@ -12,14 +12,14 @@ import org.mozc.android.inputmethod.japanese.model.SelectionTracker
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCandidates
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands
 
-class MozcInputResultRenderInputConnection(
+class MozcInputResultRenderResult(
     private val command: ProtoCommands.Command,
     private val keyEvent: KeycodeConverter.KeyEventInterface,
     private val selectionTracker: SelectionTracker,
-): InputResult.RenderInputConnection {
+): InputResult {
 
-    override fun renderInputConnection(inputConnection: InputConnection?) {
-        if(inputConnection == null) return
+    override fun process(ime: FusionIME) {
+        val inputConnection = ime.inputConnection ?: return
 
         val output = command.output
 

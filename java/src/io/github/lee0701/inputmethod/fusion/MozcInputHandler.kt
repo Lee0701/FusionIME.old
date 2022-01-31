@@ -8,7 +8,6 @@ import com.google.common.base.Optional
 import org.mozc.android.inputmethod.japanese.ConfigUtil
 import org.mozc.android.inputmethod.japanese.KeycodeConverter
 import org.mozc.android.inputmethod.japanese.MozcUtil
-import org.mozc.android.inputmethod.japanese.PrimaryKeyCodeConverter
 import org.mozc.android.inputmethod.japanese.keyboard.Keyboard
 import org.mozc.android.inputmethod.japanese.model.SelectionTracker
 import org.mozc.android.inputmethod.japanese.protobuf.ProtoCommands
@@ -21,7 +20,6 @@ class MozcInputHandler(
     override val listener: InputHandler.Listener
 ): InputHandler {
 
-    private val primaryKeyCodeConverter: PrimaryKeyCodeConverter = PrimaryKeyCodeConverter(context)
     private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     private val sessionExecutor: SessionExecutor =
         SessionExecutor.getInstanceInitializedIfNecessary(
@@ -34,14 +32,14 @@ class MozcInputHandler(
         val command = cmd.orNull() ?: return@EvaluationCallback
         val keyEvent = event.orNull() ?: return@EvaluationCallback
         if (command.input.command.type != ProtoCommands.SessionCommand.CommandType.EXPAND_SUGGESTION) {
-            val result = MozcInputResultRenderInputConnection(command, keyEvent, selectionTracker)
+            val result = MozcInputResultRenderResult(command, keyEvent, selectionTracker)
             listener.onResult(result)
         }
     }
 
     private val sendKeyToApplicationCallback: EvaluationCallback = EvaluationCallback { cmd, event ->
         val keyEvent = event.orNull() ?: return@EvaluationCallback
-        val result = MozcInputResultInteractIME(keyEvent)
+        val result = MozcInputResultSendKeyToApplication(keyEvent)
         listener.onResult(result)
     }
 

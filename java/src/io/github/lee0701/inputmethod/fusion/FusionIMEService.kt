@@ -57,11 +57,7 @@ class FusionIMEService: InputMethodService(), FusionIME, InputViewManager.Listen
     }
 
     override fun onResult(inputResult: InputResult) {
-        when(inputResult) {
-            is MozcInputResultInteractIME -> inputResult.interactIME(this)
-            is MozcInputResultRenderInputConnection -> inputResult.renderInputConnection(inputConnection)
-            else -> {}
-        }
+        inputResult.process(this)
     }
 
     override fun sendEditorAction(fromEnterKey: Boolean): Boolean {
