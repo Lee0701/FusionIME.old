@@ -34,7 +34,7 @@ android {
             path 'src/main/native/jni/Android.mk'
         }
     }
-    ndkVersion '24.0.8215888'
+    ndkVersion '25.2.9519653'
 
     packagingOptions {
         resources {
@@ -49,6 +49,7 @@ android {
     lint {
         checkReleaseBuilds false
     }
+    namespace 'io.github.lee0701.inputmethod.fusion'
 }
 
 dependencies {
